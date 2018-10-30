@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import configparser
+
+ini = configparser.ConfigParser()
+ini.read('./config.ini', 'UTF-8')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -81,10 +85,10 @@ DATABASES = {
         #'ENGINE': 'django.db.backends.sqlite3',
         #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'mysql.connector.django',
-        'NAME': 'testdata',  # データベース名
-        'USER': 'testUser',  # ユーザ名
-        'PASSWORD': 'testtest',  # パスワード
-        'HOST': 'localhost',
+        'NAME': ini['db_info']['database'], #'testdata',  # データベース名
+        'USER': ini['db_info']['user'], #'testUser',  # ユーザ名
+        'PASSWORD': ini['db_info']['password'], #'testtest',  # パスワード
+        'HOST': ini['db_info']['host'], #'localhost',
     }
 }
 
@@ -130,3 +134,48 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # './static'
 
 # ログイン後トップページにリダイレクト
 LOGIN_REDIRECT_URL = '/'
+
+LOGGING = {
+    # バージョンは「1」固定
+    'version': 1,
+    # 既存のログ設定を無効化しない
+    'disable_existing_loggers': False,
+    # ログフォーマット
+    'formatters': {
+        # 開発用
+        'develop': {
+            'format': '%(asctime)s [%(levelname)s] %(pathname)s:%(lineno)d '
+                        '%(message)s'
+        },
+    },
+    # ハンドラ
+    'handlers': {
+        # コンソール出力ハンドラ
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'develop',
+        },
+    },
+    # ロガー
+    'loggers': {
+        # 自作アプリケーション全般のログを拾うロガー
+        '':{
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        # Django 本体が出すログ全般を拾うロガー
+        'django':{
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        # 発行されるSQL文を出力するための設定
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}

@@ -9,6 +9,16 @@
     <p>Created:&nbsp;{{ object.created_at }}<span>/</span>Updated:&nbsp;{{ object.updated_at }}</p>
 </section>
 
+<!--
+<section>
+    {{ greenhouse_data_list }}
+</section>
+-->
+
+<img src='{% url 'monitor:plot' object.pk %}' width=600 height=600>
+
+<p><a href="https://www.google.co.jp/" target="_blank">URLリンク</a></p>
+
 <section>
     <p><a href="javascript:history.back()">&lt; Back</a></p>
 </section>
