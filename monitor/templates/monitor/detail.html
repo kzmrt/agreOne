@@ -1,25 +1,50 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ object.name }}</h1>
-<section class="post-text">
-    {{ object.memo|linebreaksbr }}
-</section>
-<section class="post-date">
-    <p>Created:&nbsp;{{ object.created_at }}<span>/</span>Updated:&nbsp;{{ object.updated_at }}</p>
-</section>
 
-<!--
-<section>
-    {{ greenhouse_data_list }}
-</section>
--->
+    <h1>{{ object.name }}</h1>
+    <section class="post-text">
+        {{ object.memo|linebreaksbr }}
+    </section>
+    <section class="post-date">
+        <p>Created:&nbsp;{{ object.created_at }}<span>/</span>Updated:&nbsp;{{ object.updated_at }}</p>
+    </section>
 
-<img src='{% url 'monitor:plot' object.pk %}' width=600 height=600>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 
-<p><a href="https://www.google.co.jp/" target="_blank">URLリンク</a></p>
+    <form name="name_form" action="{% url 'monitor:chart' object.pk %}" method="POST">
+        {% csrf_token %}
+        <input type="text" id="id_input_data" name="input_data" value="77">
+        <input class="btn" type="submit">
+    </form>
 
-<section>
-    <p><a href="javascript:history.back()">&lt; Back</a></p>
-</section>
+    <tbody>
+        <!-- グラフ表示 -->
+        <div id="content">{% include 'monitor/chart.html' %}</div>
+    </tbody>
+
+    <script>
+    $("form").submit( function(event) {
+        event.preventDefault();
+        var form = $(this);
+        $.ajax({
+             url: form.prop("action"),
+             method: form.prop("method"),
+             data: form.serialize(),
+             timeout: 10000,
+             dataType: "text",
+        })
+        .done( function(data) {
+             //alert("success");
+             $('#content').html(data);
+        })
+      });
+    </script>
+
+    <section>
+        <p><a href="javascript:history.back()">&lt; Back</a></p>
+    </section>
+
 {% endblock %}

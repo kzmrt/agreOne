@@ -11,7 +11,7 @@ urlpatterns = [
     path('monitor/<int:pk>/', views.DetailView.as_view(), name='detail'),
 
     # グラフ描画
-    path('monitor/<int:pk>/plot/', views.get_svg, name='plot'),
+    path("monitor/<int:pk>/chart/", views.update_chart, name='chart'),
 
     # ex: /monitor/help/
     path('monitor/help/', views.help, name='help'),
