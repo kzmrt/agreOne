@@ -82,6 +82,17 @@ def update_chart(request, pk):
     return render(request, 'monitor/chart.html', {'y_data': y_data, 'x_data': x_data})
 
 
+def update_plot(request, pk):
+
+    input_text_data = request.POST.getlist("input_data") # 入力した値を取得
+
+    y[0] = int(input_text_data[0]) # 一つ目のデータを入力値に更新する
+    y[1] = pk
+    y_data = y
+    x_data = x
+    return render(request, 'monitor/plot.html', {'y_data': y_data, 'x_data': x_data})
+
+
 @login_required
 def help(request):
     return HttpResponse("Member Only Help Page")

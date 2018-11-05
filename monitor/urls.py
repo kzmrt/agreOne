@@ -12,6 +12,7 @@ urlpatterns = [
 
     # グラフ描画
     path("monitor/<int:pk>/chart/", views.update_chart, name='chart'),
+    path("monitor/<int:pk>/plot/", views.update_plot, name='plot'),
 
     # ex: /monitor/help/
     path('monitor/help/', views.help, name='help'),
