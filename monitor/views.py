@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.views import generic
 from .models import Location, Greenhouse
@@ -8,8 +8,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 import datetime
 import logging
 #from monitor import db
-#from .forms import MyForm
-
+from .forms import GreenhouseForm, ToDoForm
+from django.views.generic.edit import ModelFormMixin
+from bootstrap_datepicker_plus import DateTimePickerInput
 
 """
 Django Auth
@@ -36,10 +37,15 @@ class IndexView(LoginRequiredMixin, generic.ListView): # generic.ListViewを継�
     template_name = 'monitor/index.html'
 
 
-class DetailView(generic.DetailView):
+class DetailView(ModelFormMixin, generic.DetailView):
     model = Location
     template_name = 'monitor/detail.html'
+    form_class = GreenhouseForm
 
+    def get_form(self):
+        form = super().get_form()
+        form.fields['data_datetime'].widget = DateTimePickerInput()
+        return form
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -64,6 +70,9 @@ class DetailView(generic.DetailView):
                     #x.append(data[0])
                     y.append(data[3])
         """
+        # Formの実験
+        formS = ToDoForm()
+        context['sample_form'] = formS
 
         context['x_data'] = x
         context['y_data'] = y
@@ -87,7 +96,7 @@ def update_plot(request, pk):
     input_text_data = request.POST.getlist("input_data") # 入力した値を取得
 
     y[0] = int(input_text_data[0]) # 一つ目のデータを入力値に更新する
-    y[1] = pk
+    #y[1] = pk
     y_data = y
     x_data = x
     return render(request, 'monitor/plot.html', {'y_data': y_data, 'x_data': x_data})
@@ -96,9 +105,5 @@ def update_plot(request, pk):
 @login_required
 def help(request):
     return HttpResponse("Member Only Help Page")
-
-
-
-
 
 

@@ -1,6 +1,32 @@
 from django import forms
+from .models import Greenhouse
+import bootstrap_datepicker_plus as datetimepicker
+from bootstrap_datepicker_plus import DatePickerInput
 
-class MyForm(forms.Form):
-    start = forms.DateTimeField(input_formats=["%d %b %Y %H:%M:%S %Z"], label='開始日時')
-    end = forms.DateTimeField(input_formats=["%d %b %Y %H:%M:%S %Z"], label='終了日時')
 
+class GreenhouseForm(forms.ModelForm):
+    class Meta:
+        model = Greenhouse
+        fields = ('data_datetime',)
+        widgets = {
+            # スマホ対応版 キーボード入力不可
+            'data_datetime': datetimepicker.DateTimePickerInput(
+                format='%Y-%m-%d %H:%M:%S',
+                attrs={'readonly': 'true'},
+                options={
+                    'locale': 'ja',
+                    'dayViewHeaderFormat': 'YYYY年 MMMM',
+                    'ignoreReadonly': True,
+                    'allowInputToggle': True,
+                }
+            ),
+        }
+
+
+class ToDoForm(forms.Form):
+    todo = forms.CharField(
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    date = forms.DateField(
+        widget=DatePickerInput(format='%m/%d/%Y')
+    )
