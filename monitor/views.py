@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 import datetime
 import logging
-#from monitor import db
+from monitor import db
 from .forms import SampleForm, GreenhouseForm
 from django.views.generic.edit import ModelFormMixin
 from bootstrap_datepicker_plus import DateTimePickerInput
@@ -29,6 +29,10 @@ logger = logging.getLogger('development')
 
 x = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"]
 y = [12, 19, 30, 50, 20, 30]
+
+# 温室データ
+x_greenhouse_data = [] # 日時
+y_greenhouse_data = [] # データ
 
 class IndexView(LoginRequiredMixin, generic.ListView): # generic.ListViewを継承
     model = Location
@@ -57,19 +61,17 @@ class DetailView(ModelFormMixin, generic.DetailView):
         #                                                            data_datetime__range=(start_date, end_date))
         #green = db.getDbRecord.getGreenhouseRecord(self.kwargs['pk'], start_datetime=start_date, end_datetime=end_date)
 
-        """
-                green = [12, 19, 30, 50, 20, 30]
-                context['greenhouse_data_list'] = green
 
-                start = '2018-10-22 15:15:00'
-                end = '2018-10-22 18:45:00'
-                x = []
-                y = []
-                for data in db.getDbRecord.getGreenhouseRecord(self.kwargs['pk'], start_datetime=start, end_datetime=end):  # DBレコード取得
-                    x.append(data[2].strftime('%Y/%m/%d %H:%M:%S'))
-                    #x.append(data[0])
-                    y.append(data[3])
-        """
+        start = '2018-10-22 15:15:00'
+        end = '2018-10-22 18:45:00'
+
+        for data in db.getDbRecord.getGreenhouseRecord(self.kwargs['pk'], start_datetime=start, end_datetime=end):  # DBレコード取得
+            x_greenhouse_data.append(data[2].strftime('%Y/%m/%d %H:%M:%S'))
+            y_greenhouse_data.append(data[3])
+
+        context['x_greenhouse_data'] = x_greenhouse_data
+        context['y_greenhouse_data'] = y_greenhouse_data
+
         # Formの実験
         formS = SampleForm()
         context['sample_form'] = formS
@@ -95,12 +97,20 @@ def update_plot(request, pk):
     start = request.POST.getlist("start_date")  # 入力した値を取得
     end = request.POST.getlist("end_date")  # 入力した値を取得
 
-    print(start[0])
-    print(end[0])
+    # print(start[0])
+    # print(end[0])
 
-    y_data = y
-    x_data = x
-    return render(request, 'monitor/plot.html', {'y_data': y_data, 'x_data': x_data})
+    # データ配列初期化
+    x_greenhouse_data.clear()
+    y_greenhouse_data.clear()
+
+    # 指定日時のデータを取得
+    for data in db.getDbRecord.getGreenhouseRecord(pk, start_datetime=start[0],
+                                                   end_datetime=end[0]):  # DBレコード取得
+        x_greenhouse_data.append(data[2].strftime('%Y/%m/%d %H:%M:%S'))
+        y_greenhouse_data.append(data[3])
+
+    return render(request, 'monitor/plot.html', {'y_greenhouse_data': y_greenhouse_data, 'x_greenhouse_data': x_greenhouse_data})
 
 
 @login_required

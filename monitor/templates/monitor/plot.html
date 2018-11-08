@@ -5,10 +5,10 @@
     new Chart(chartChart, {
         type: 'line',
         data: {
-            labels: {% autoescape off %} {{ x_data }} {% endautoescape %} ,
+            labels: {% autoescape off %} {{ x_greenhouse_data }} {% endautoescape %} ,
             datasets: [{
                 label: '# of Votes',
-                data: {{ y_data }},
+                data: {{ y_greenhouse_data }},
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',

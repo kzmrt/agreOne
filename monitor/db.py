@@ -45,6 +45,7 @@ class getDbRecord:
             add_params.append(start_datetime)
             add_params.append(end_datetime)
             add_params.append(pk)
+            logger.info(add_params)
 
             cursor.execute(sql_get_greenhouse, add_params)
             rows = cursor.fetchall()

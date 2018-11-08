@@ -38,6 +38,7 @@ class SampleForm(forms.Form):
                 'ignoreReadonly': True,
                 'allowInputToggle': True,
                 'minDate': '2018/10/22', # 最小日時（データ取得開始日）
+                'defaultDate': '2018/10/22', # 初期表示
             }
         ).start_of('term'),
     )
