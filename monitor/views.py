@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 import datetime
 import logging
 #from monitor import db
-from .forms import GreenhouseForm, ToDoForm
+from .forms import SampleForm, GreenhouseForm
 from django.views.generic.edit import ModelFormMixin
 from bootstrap_datepicker_plus import DateTimePickerInput
 
@@ -44,7 +44,7 @@ class DetailView(ModelFormMixin, generic.DetailView):
 
     def get_form(self):
         form = super().get_form()
-        form.fields['data_datetime'].widget = DateTimePickerInput()
+        # form.fields['data_datetime'].widget = DateTimePickerInput()
         return form
 
     def get_context_data(self, **kwargs):
@@ -71,7 +71,7 @@ class DetailView(ModelFormMixin, generic.DetailView):
                     y.append(data[3])
         """
         # Formの実験
-        formS = ToDoForm()
+        formS = SampleForm()
         context['sample_form'] = formS
 
         context['x_data'] = x
@@ -92,11 +92,12 @@ def update_chart(request, pk):
 
 
 def update_plot(request, pk):
+    start = request.POST.getlist("start_date")  # 入力した値を取得
+    end = request.POST.getlist("end_date")  # 入力した値を取得
 
-    input_text_data = request.POST.getlist("input_data") # 入力した値を取得
+    print(start[0])
+    print(end[0])
 
-    y[0] = int(input_text_data[0]) # 一つ目のデータを入力値に更新する
-    #y[1] = pk
     y_data = y
     x_data = x
     return render(request, 'monitor/plot.html', {'y_data': y_data, 'x_data': x_data})
