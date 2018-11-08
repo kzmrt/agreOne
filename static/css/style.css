@@ -192,3 +192,13 @@ header .site-name a {
 .common-form .delete {
     background-color: #f44336;
 }
+
+/* カレンダーの土日に色を付ける */
+.datepicker-days th.dow:first-child,
+.datepicker-days td:first-child {
+    color: #f00;
+}
+.datepicker-days th.dow:last-child,
+.datepicker-days td:last-child {
+    color: #00f;
+}
