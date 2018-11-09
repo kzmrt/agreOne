@@ -181,3 +181,7 @@ LOGGING = {
         },
     },
 }
+
+# セッションの設定
+SESSION_COOKIE_AGE = 600 # 10分
+SESSION_SAVE_EVERY_REQUEST = True # 1リクエストごとにセッション情報を更新
