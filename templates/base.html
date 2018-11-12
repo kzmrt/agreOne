@@ -24,13 +24,13 @@
         <nav>
             <ul>
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'logout' %}" class="logout">Logout</a></li>
+                <li><a href="{% url 'logout' %}" class="logout">ログアウト</a></li>
                     {% if form_name == "password_change" %}
                     {% else %}
                         <li><a href="{% url 'monitor:password_change' %}" class="logout">パスワード変更</a></li>
                     {% endif %}
                 {% else %}
-                <li><a href="{% url 'login' %}" class="login">Login</a></li>
+                <li><a href="{% url 'login' %}" class="login">ログイン</a></li>
                 {% endif %}
             </ul>
         </nav>
