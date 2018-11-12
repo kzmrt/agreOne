@@ -14,6 +14,10 @@ urlpatterns = [
     path("monitor/<int:pk>/chart/", views.update_chart, name='chart'),
     path("monitor/<int:pk>/plot/", views.update_plot, name='plot'),
 
+    # パスワード変更画面
+    path('password_change/', views.PasswordChange.as_view(), name='password_change'),
+    path('password_change/done/', views.PasswordChangeDone.as_view(), name='password_change_done'),
+
     # ex: /monitor/help/
     path('monitor/help/', views.help, name='help'),
 ]

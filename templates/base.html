@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
-    <title>{% if request.path != '/' %}{% block title %}{% endblock %} | {% endif %}Blog App with Auth | Django2 Tutorial</title>
+    <title>{% if request.path != '/' %}{% block title %}{% endblock %} | {% endif %}Greenhouse Monitor | Django2 Tutorial</title>
 </head>
 <body>
 <div class="container">
@@ -25,6 +25,10 @@
             <ul>
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'logout' %}" class="logout">Logout</a></li>
+                    {% if form_name == "password_change" %}
+                    {% else %}
+                        <li><a href="{% url 'monitor:password_change' %}" class="logout">パスワード変更</a></li>
+                    {% endif %}
                 {% else %}
                 <li><a href="{% url 'login' %}" class="login">Login</a></li>
                 {% endif %}

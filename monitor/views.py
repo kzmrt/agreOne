@@ -10,7 +10,8 @@ import logging
 from monitor import db
 from .forms import SampleForm, GreenhouseForm
 from django.views.generic.edit import ModelFormMixin
-from bootstrap_datepicker_plus import DateTimePickerInput
+from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
+from django.urls import reverse_lazy
 
 """
 Django Auth
@@ -111,6 +112,22 @@ def update_plot(request, pk):
         y_greenhouse_data.append(data[3])
 
     return render(request, 'monitor/plot.html', {'y_greenhouse_data': y_greenhouse_data, 'x_greenhouse_data': x_greenhouse_data})
+
+
+class PasswordChange(LoginRequiredMixin, PasswordChangeView):
+    """パスワード変更ビュー"""
+    success_url = reverse_lazy('monitor:password_change_done')
+    template_name = 'monitor/password_change.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) # 継承元のメソッドCALL
+        context["form_name"] = "password_change"
+        return context
+
+
+class PasswordChangeDone(LoginRequiredMixin,PasswordChangeDoneView):
+    """パスワード変更完了"""
+    template_name = 'monitor/password_change_done.html'
 
 
 @login_required
